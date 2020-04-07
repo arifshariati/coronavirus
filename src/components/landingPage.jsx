@@ -127,10 +127,10 @@ class LandingPage extends Component{
                 <Container fluid>
                     <Row className="justify-content-md-center">
                         <Col xs lg="8">
-                        <Card className="shadow-sm" style={{marginBottom:'1rem',padding:'1rem',border:'none'}}>
+                        <Card className="shadow-sm" style={{marginBottom:'0rem',padding:'1rem',border:'none'}}>
                             <Row className="justify-content-md-center">
                                 <Col>
-                                    <Alert style={{backgroundColor:colors.confirmed}}>
+                                    <Alert className="shadow" style={{backgroundColor:colors.confirmed}}>
                                     <h4>
                                     <NumberFormat 
                                         value={confirmed} 
@@ -142,7 +142,7 @@ class LandingPage extends Component{
                                     </Alert>
                                 </Col>
                                 <Col>
-                                    <Alert style={{backgroundColor:colors.recovered}}>
+                                    <Alert className="shadow" style={{backgroundColor:colors.recovered}}>
                                     <h4>
                                     <NumberFormat 
                                         value={recovered} 
@@ -154,7 +154,7 @@ class LandingPage extends Component{
                                     </Alert>
                                 </Col>
                                 <Col>
-                                    <Alert style={{backgroundColor:colors.deaths,color:'#FFFFFF'}}>
+                                    <Alert className="shadow" style={{backgroundColor:colors.deaths,color:'#FFFFFF'}}>
                                     <h4>
                                     <NumberFormat 
                                         value={deaths} 

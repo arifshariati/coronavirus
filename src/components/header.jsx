@@ -14,6 +14,7 @@ return(
                                 <Nav.Link href="/" alt="Coronavirus Home Page">Home</Nav.Link>
                                 <Nav.Link href="/DataChartOnly" alt="Coronavirus visual data">Data Chart</Nav.Link>
                                 <Nav.Link href="/Data-Table" alt="Coronavirus Deaths and Recovered Cases">Data Table</Nav.Link>
+                                <Nav.Link href="/News" alt="Coronavirus Latest News"> <b>BORED ?</b> Vist News Gallery</Nav.Link>
                             </Nav>
                         </Navbar.Collapse>
                     </Navbar>

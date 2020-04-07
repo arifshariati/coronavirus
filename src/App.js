@@ -4,8 +4,10 @@ import Header from './components/header';
 import LandingPage from './components/landingPage';
 import DataChart from './components/dataChart';
 import DataChartOnly from './components/dataChartOnly';
+import News from './components/news';
 import Footer from './components/footer';
 import { BrowserRouter as Router, Route} from 'react-router-dom';
+
 
 class App extends Component {
   
@@ -17,6 +19,7 @@ class App extends Component {
           <Route exact path="/" component={LandingPage} />
           <Route  path="/DataChartOnly" component={DataChartOnly} />
           <Route path="/Data-Table" component={DataChart} />
+          <Route path="/News" component={News} />
           <Footer />
         </Router>
       </div>

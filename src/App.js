@@ -5,11 +5,23 @@ import LandingPage from './components/landingPage';
 import DataChart from './components/dataChart';
 import DataChartOnly from './components/dataChartOnly';
 import News from './components/news';
+import AboutCoronavirus from './components/aboutCoronavirus';
 import Footer from './components/footer';
+import ReactGA from 'react-ga';
 import { BrowserRouter as Router, Route} from 'react-router-dom';
 
 
 class App extends Component {
+  
+  componentDidMount(){
+
+    this.initializeReactGA();
+    
+  }
+  initializeReactGA(){
+    ReactGA.initialize('UA-163115935-1');
+    ReactGA.pageview('/homepage');
+  }
   
   render(){
     return (
@@ -17,9 +29,10 @@ class App extends Component {
         <Router>
           <Header />
           <Route exact path="/" component={LandingPage} />
-          <Route  path="/DataChartOnly" component={DataChartOnly} />
-          <Route path="/Data-Table" component={DataChart} />
+          <Route  path="/Data-Visualization" component={DataChartOnly} />
+          <Route path="/Daily-Data" component={DataChart} />
           <Route path="/News" component={News} />
+          <Route path="/About-Coronavirus" component={AboutCoronavirus} />
           <Footer />
         </Router>
       </div>

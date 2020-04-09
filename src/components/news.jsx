@@ -1,6 +1,8 @@
 import React,{ Component } from 'react';
 import Axios from 'axios';
-import {Container,Row,Col,Table,Form, Card, CardDeck, CardColumns, Button} from 'react-bootstrap';
+import {Container,Row,Col, Card, CardColumns} from 'react-bootstrap';
+import ReactGA from 'react-ga';
+import Loader from 'react-loader-spinner';
 
 const trumpNewsEndpoint="https://newsapi.org/v2/top-headlines?q=trump&apiKey=1eef6d1799164641972598884245ee39";
 const USHealthEndpoint="https://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=1eef6d1799164641972598884245ee39";
@@ -20,6 +22,10 @@ class News extends Component{
     }
 
     componentDidMount(){
+
+        ReactGA.initialize('UA-163115935-1');
+        ReactGA.pageview('/News');
+
         this.getNews();
     }
     async getNews(){
@@ -48,6 +54,27 @@ class News extends Component{
             entertainment,
             sports
         }=this.state;
+
+        if(!trumpNews) return (
+            <Container fluid>
+                <Row className="justify-content-md-center">
+                    <Col xs="12" lg="8">
+                    <Card 
+                        className="shadow" 
+                        style={{marginBottom:'1rem',paddingTop:'15rem',border:'none',minHeight:"700px"}}
+                    >
+                        <Loader 
+                            type="ThreeDots"
+                            color="#DD2C00"
+                            height={100}
+                            width={100}
+                            timeout={900000000}
+                        />
+                    </Card>     
+                    </Col>
+                </Row>
+            </Container>
+        );
         return(
             <div className="mid">
                 <Container fluid>
@@ -76,7 +103,7 @@ class News extends Component{
                                             </Card.Text>
                                             </Card.Body>
                                             <Card.Footer>
-                                                <Card.Link href={newsItem.url} target="_blank"><b>Read Fill Story on</b> {newsItem.source.name}</Card.Link>
+                                                <Card.Link href={newsItem.url} alt={newsItem.title} target="_blank"><b>Read Fill Story on</b> {newsItem.source.name}</Card.Link>
                                             </Card.Footer>
                                         </Card>
                                         )
@@ -111,7 +138,7 @@ class News extends Component{
                                             </Card.Text>
                                             </Card.Body>
                                             <Card.Footer>
-                                                <Card.Link href={newsItem.url} target="_blank"><b>Read Fill Story on</b> {newsItem.source.name}</Card.Link>
+                                                <Card.Link href={newsItem.url} alt={newsItem.title} target="_blank"><b>Read Fill Story on</b> {newsItem.source.name}</Card.Link>
                                             </Card.Footer>
                                         </Card>
                                         )
@@ -145,7 +172,7 @@ class News extends Component{
                                             </Card.Text>
                                             </Card.Body>
                                             <Card.Footer>
-                                                <Card.Link href={newsItem.url} target="_blank"><b>Read Fill Story on</b> {newsItem.source.name}</Card.Link>
+                                                <Card.Link href={newsItem.url} alt={newsItem.title} target="_blank"><b>Read Fill Story on</b> {newsItem.source.name}</Card.Link>
                                             </Card.Footer>
                                         </Card>
                                         )
@@ -179,7 +206,7 @@ class News extends Component{
                                             </Card.Text>
                                             </Card.Body>
                                             <Card.Footer>
-                                                <Card.Link href={newsItem.url} target="_blank"><b>Read Fill Story on</b> {newsItem.source.name}</Card.Link>
+                                                <Card.Link href={newsItem.url} alt={newsItem.title} target="_blank"><b>Read Fill Story on</b> {newsItem.source.name}</Card.Link>
                                             </Card.Footer>
                                         </Card>
                                         )
@@ -213,7 +240,7 @@ class News extends Component{
                                             </Card.Text>
                                             </Card.Body>
                                             <Card.Footer>
-                                                <Card.Link href={newsItem.url} target="_blank"><b>Read Fill Story on</b> {newsItem.source.name}</Card.Link>
+                                                <Card.Link href={newsItem.url} alt={newsItem.title} target="_blank"><b>Read Fill Story on</b> {newsItem.source.name}</Card.Link>
                                             </Card.Footer>
                                         </Card>
                                         )
@@ -247,7 +274,7 @@ class News extends Component{
                                             </Card.Text>
                                             </Card.Body>
                                             <Card.Footer>
-                                                <Card.Link href={newsItem.url} target="_blank"><b>Read Fill Story on</b> {newsItem.source.name}</Card.Link>
+                                                <Card.Link href={newsItem.url} alt={newsItem.title} target="_blank"><b>Read Fill Story on</b> {newsItem.source.name}</Card.Link>
                                             </Card.Footer>
                                         </Card>
                                         )

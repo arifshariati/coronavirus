@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import Axios from 'axios';
 import {Container,Row,Col,Table,Form, Card} from 'react-bootstrap';
 import NumberFormat from 'react-number-format';
-import { AreaChart, XAxis,YAxis, CartesianGrid,Tooltip,Legend, Area} from 'recharts';
+import ReactGA from 'react-ga';
 import Pagination from './pagination';
+import Loader from 'react-loader-spinner';
 
 const colors = {
     confirmed: '#FFD31D',
@@ -22,7 +23,7 @@ class DataChart extends Component{
       state={
         currentData:[],
         currentPage:1,
-        dataPerPage:7,
+        dataPerPage:14,
         selectedCountry:"China",
         temp:[],
         countries:[],
@@ -33,6 +34,10 @@ class DataChart extends Component{
         document.body.clientWidth
       }
       componentDidMount(){
+
+        ReactGA.initialize('UA-163115935-1');
+        ReactGA.pageview('/Daily-Data');
+
         this.getCountryByIP();
         window.addEventListener('resize',this.updateDimensions);
       }
@@ -84,7 +89,6 @@ class DataChart extends Component{
 
         this.setState({
             selectedCountry:searchCountry,
-            countries:countryRes.data[searchCountry],
             tableCountries:byConfirmed
         })
         const indexOfLastData=this.state.currentPage * this.state.dataPerPage;
@@ -104,7 +108,6 @@ class DataChart extends Component{
 
         this.setState({
             selectedCountry:searchCountry,
-            countries:countryRes.data[searchCountry],
             tableCountries:byConfirmed
         })
         const indexOfLastData=this.state.currentPage * this.state.dataPerPage;
@@ -125,10 +128,31 @@ render(){
         dataPerPage,
         selectedCountry,
         temp,
-        countries,
         tableCountries,
         width
     } = this.state;
+
+    if(!currentData) return (
+        <Container fluid>
+            <Row className="justify-content-md-center">
+                <Col xs="12" lg="8">
+                <Card 
+                    className="shadow" 
+                    style={{marginBottom:'1rem',paddingTop:'15rem',border:'none',minHeight:"700px"}}
+                >
+                    <Loader 
+                        type="ThreeDots"
+                        color="#DD2C00"
+                        height={100}
+                        width={100}
+                        timeout={900000000}
+                    />
+                </Card>     
+                </Col>
+            </Row>
+        </Container>
+    );
+
     return(
         <div className="mid">
             <Container fluid>
@@ -144,33 +168,6 @@ render(){
                                 }
                             </Form.Control>
                     </Card>     
-                    </Col>
-                </Row>
-            </Container>
-            
-            <Container fluid>
-                <Row className="justify-content-md-center">
-                    <Col xs lg="8">
-                        <Card className="shadow-sm" style={{border:'none'}}>
-                            <div style={{marginTop:'1rem'}}>
-                                <h5 style={{textAlign:'center'}}>{selectedCountry}'s Data</h5>
-                            </div>
-                            <AreaChart 
-                                width={ width > 980 ? 1200 : width - 80 } 
-                                height={300} 
-                                data={countries} 
-                                margin={{top: 20, right: 20, left: 20, bottom: 20}}
-                                >
-                            <CartesianGrid strokeDasharray="1 1" />
-                            <XAxis dataKey="date" />
-                            <YAxis />
-                            <Tooltip />
-                            <Legend/>
-                            <Area type="monotone"  dataKey="confirmed" dot={false}  stroke={colors.confirmed} fill={colors.confirmed} />
-                            <Area type="monotone" dataKey="recovered" dot={false} stroke={colors.recovered} fill={colors.recovered} />
-                            <Area type="monotone" dataKey="deaths" dot={false}  stroke={colors.deaths} fill={colors.deaths} />
-                            </AreaChart>
-                        </Card>
                     </Col>
                 </Row>
             </Container>

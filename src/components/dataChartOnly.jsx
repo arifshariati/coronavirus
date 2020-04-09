@@ -3,6 +3,8 @@ import Axios from 'axios';
 import {Container,Row,Col,Table,Form, Card} from 'react-bootstrap';
 import NumberFormat from 'react-number-format';
 import { AreaChart, XAxis,YAxis, CartesianGrid,Tooltip,Legend, Area} from 'recharts';
+import ReactGA from 'react-ga';
+import Loader from 'react-loader-spinner';
 
 const colors = {
     confirmed: '#FFD31D',
@@ -31,6 +33,10 @@ class DataChartOnly extends Component{
         document.body.clientWidth
       }
       componentDidMount(){
+        
+        ReactGA.initialize('UA-163115935-1');
+        ReactGA.pageview('/Data-Visualization');
+
         this.getCountryByIP();
         window.addEventListener('resize',this.updateDimensions);
       }
@@ -93,6 +99,27 @@ render(){
         countries,
         width
     } = this.state;
+
+    if(!countries) return (
+        <Container fluid>
+            <Row className="justify-content-md-center">
+                <Col xs="12" lg="8">
+                <Card 
+                    className="shadow" 
+                    style={{marginBottom:'1rem',paddingTop:'15rem',border:'none',minHeight:"700px"}}
+                >
+                    <Loader 
+                        type="ThreeDots"
+                        color="#DD2C00"
+                        height={100}
+                        width={100}
+                        timeout={9000000000}
+                    />
+                </Card>     
+                </Col>
+            </Row>
+        </Container>
+    );
     return(
         <div className="mid">
             <Container fluid>

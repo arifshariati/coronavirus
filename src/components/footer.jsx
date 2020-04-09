@@ -20,6 +20,9 @@ function Footer(){
                     <a href={dataParser} rel="alternate nooperner noreferre" target="_blank">@pomber</a> <br />
                 </p>
                 <p>
+                    And <a href="https://covid-19-apis.postman.com/" rel="alternate nooperner noreferre" target="_blank">postman.com</a>
+                </p>
+                <p>
                     Developed with <a href="http://recharts.org/" rel="alternate nooperner noreferre" target="_blank">Recharts for Responsive Charting</a>,{' '}
                     <a href="https://react-bootstrap.github.io/" rel="alternate nooperner noreferre" target="_blank">React-Bootstrap</a>,{' '}
                     <a href="https://react-leaflet.js.org/" rel="alternate nooperner noreferre" target="_blank">React-Leaflet for Map Data Visualization</a>,{' '}

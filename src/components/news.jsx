@@ -2,7 +2,8 @@ import React,{ Component } from 'react';
 import Axios from 'axios';
 import {Container,Row,Col, Card, CardColumns} from 'react-bootstrap';
 import ReactGA from 'react-ga';
-import Loader from 'react-loader-spinner';
+import Loading from './loading';
+
 
 const trumpNewsEndpoint="https://newsapi.org/v2/top-headlines?q=trump&apiKey=1eef6d1799164641972598884245ee39";
 const USHealthEndpoint="https://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=1eef6d1799164641972598884245ee39";
@@ -13,6 +14,7 @@ const sportsEndpoint="https://newsapi.org/v2/top-headlines?country=us&category=s
 
 class News extends Component{
     state={
+        loading:true,
         trumpNews:[],
         USHealth:[],
         technology:[],
@@ -37,6 +39,7 @@ class News extends Component{
         const sportsRes=await Axios.get(sportsEndpoint);
         console.log(trumpNewsRes.data.articles);
         this.setState({
+            loading:false,
             trumpNews:trumpNewsRes.data.articles.slice(0,3),
             USHealth:USHealthRes.data.articles.slice(0,6),
             technology:technologyRes.data.articles.slice(0,3),
@@ -55,25 +58,9 @@ class News extends Component{
             sports
         }=this.state;
 
-        if(!trumpNews) return (
-            <Container fluid>
-                <Row className="justify-content-md-center">
-                    <Col xs="12" lg="8">
-                    <Card 
-                        className="shadow" 
-                        style={{marginBottom:'1rem',paddingTop:'15rem',border:'none',minHeight:"700px"}}
-                    >
-                        <Loader 
-                            type="ThreeDots"
-                            color="#DD2C00"
-                            height={100}
-                            width={100}
-                            timeout={900000000}
-                        />
-                    </Card>     
-                    </Col>
-                </Row>
-            </Container>
+        const loading = this.state.loading;
+        if(loading) return (
+            <Loading />
         );
         return(
             <div className="mid">

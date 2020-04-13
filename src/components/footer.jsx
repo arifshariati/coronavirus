@@ -15,8 +15,13 @@ function Footer(){
                     of this website is advised not to absorb Data, Numbers and Stats as final and do visit other information sources
                     for the sack of your information.  
                 </p>
+
+                <span id="siteseal">
+                    <img src={require('../assets/img/ssl-certificate.gif')} alt="Covid19-update.info SSL Certificate" />
+                </span>
+
                 <p>
-                    Data retrieved from <a href={dataProvider} rel="alternate nooperner noreferre" target="_blank">Johns Hopkins</a> via{' '}
+                    <br/>Data retrieved from <a href={dataProvider} rel="alternate nooperner noreferre" target="_blank">Johns Hopkins</a> via{' '}
                     <a href={dataParser} rel="alternate nooperner noreferre" target="_blank">@pomber</a> <br />
                 </p>
                 <p>

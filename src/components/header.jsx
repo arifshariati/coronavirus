@@ -15,7 +15,7 @@ return(
                                 <Nav.Link href="/Data-Visualization" alt="Coronavirus visual data">Data Visualization</Nav.Link>
                                 <Nav.Link href="/Daily-Data" alt="Coronavirus Deaths and Recovered Cases">Daily Data</Nav.Link>
                                 <Nav.Link href="/About-Coronavirus" alt="Coronavirus Overview Coronavirus Symptops Coronavirus Prevention Coronavirus Treatment">About COVID-19</Nav.Link>
-                                <Nav.Link href="/News" alt="Coronavirus Latest News"> <b>BORED ?</b> Vist News Gallery</Nav.Link>
+                                <Nav.Link href="/News" alt="Coronavirus Latest News">NEWS Headlines</Nav.Link>
                             </Nav>
                         </Navbar.Collapse>
                     </Navbar>

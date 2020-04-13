@@ -11,12 +11,16 @@ import ReactGA from 'react-ga';
 import { BrowserRouter as Router, Route} from 'react-router-dom';
 
 
-class App extends Component {
-  
-  componentDidMount(){
 
+class App extends Component {
+  state={
+    loading:true
+  }
+  componentDidMount(){
     this.initializeReactGA();
-    
+    this.setState({
+      loading:false
+    })
   }
   initializeReactGA(){
     ReactGA.initialize('UA-163115935-1');
@@ -25,6 +29,7 @@ class App extends Component {
   
   render(){
     return (
+      
       <div className="App">
         <Router>
           <Header />

@@ -1,30 +1,49 @@
 import React, { Component } from 'react';
 import Axios from 'axios';
-import {Container,Row,Col,Table,Form, Card} from 'react-bootstrap';
+import {Container,Row,Col,Table,Form, Card,Button} from 'react-bootstrap';
 import NumberFormat from 'react-number-format';
 import ReactGA from 'react-ga';
-import Pagination from './pagination';
-import Loader from 'react-loader-spinner';
+import Loading from './loading';
 
 const colors = {
     confirmed: '#FFD31D',
     recovered: '#21BF72',
     deaths: '#DD2C00',
   };
+  const showChartPeriod=[
+    {
+        period:0,
+        periodTitle:"All Data"
+    },
+    {
+        period:7,
+        periodTitle:"Last 7 Days"
+    },
+    {
+        period:14,
+        periodTitle:"Last 14 Days"
+    },
+    {
+        period:30,
+        periodTitle:"Last 30 Days"
+    }
+]
 
 class DataChart extends Component{
     constructor (props){
         super(props);
         this.getData=this.getData.bind(this);
         this.getCountry=this.getCountry.bind(this);
-        this.paginate=this.paginate.bind(this);
+        this.updateChartPeriod=this.updateChartPeriod.bind(this);
       }
       
       state={
+        loading:true,
         currentData:[],
         currentPage:1,
-        dataPerPage:14,
+        dataPerPage:7,
         selectedCountry:"China",
+        population:0,
         temp:[],
         countries:[],
         tableCountries:[],
@@ -52,7 +71,8 @@ class DataChart extends Component{
       async getCountryByIP(){
         const res=await Axios.get("https://ipapi.co/json");
         this.setState({
-            selectedCountry:res.data.country_name
+            selectedCountry:res.data.country_name ==="United States" ? "US" : res.data.country_name,
+              population:res.data.country_population
         })
         this.getData();
     }
@@ -70,11 +90,17 @@ class DataChart extends Component{
           temp:Object.keys(res.data)
         })
 
+
         const indexOfLastData=this.state.currentPage * this.state.dataPerPage;
         const indexOfFirstData=indexOfLastData - this.state.dataPerPage;
         this.setState({
-            currentData:this.state.tableCountries.slice(indexOfFirstData,indexOfLastData)
+            loading:false,
+            currentData:
+                        this.state.dataPerPage === 0 ? 
+                        this.state.tableCountries : 
+                        this.state.tableCountries.slice(indexOfFirstData,indexOfLastData)
         })
+        
         
       }
       async getCountry(event){
@@ -91,66 +117,43 @@ class DataChart extends Component{
             selectedCountry:searchCountry,
             tableCountries:byConfirmed
         })
-        const indexOfLastData=this.state.currentPage * this.state.dataPerPage;
-        const indexOfFirstData=indexOfLastData - this.state.dataPerPage;
-        this.setState({
-            currentData:this.state.tableCountries.slice(indexOfFirstData,indexOfLastData)
-        })
-      }
-      async updatePageNumber(){
-        const countryRes=await Axios.get("https://pomber.github.io/covid19/timeseries.json");
-        const searchCountry=this.state.selectedCountry;
-        
-        const byConfirmed=countryRes.data[searchCountry].slice(0);
-        byConfirmed.sort(function(a,b){
-            return b.confirmed - a.confirmed;
-        });
 
-        this.setState({
-            selectedCountry:searchCountry,
-            tableCountries:byConfirmed
-        })
+
         const indexOfLastData=this.state.currentPage * this.state.dataPerPage;
         const indexOfFirstData=indexOfLastData - this.state.dataPerPage;
         this.setState({
-            currentData:this.state.tableCountries.slice(indexOfFirstData,indexOfLastData)
+            loading:false,
+            currentData:
+                        this.state.dataPerPage === 0 ?
+                        this.state.tableCountries :
+                        this.state.tableCountries.slice(indexOfFirstData,indexOfLastData)
         })
       }
-    //paginate = pageNumber=> this.setState({currentPage:pageNumber});
-        paginate(pageNumber){
-        this.setState({currentPage:pageNumber});
-        this.updatePageNumber();
-    }
+
+      updateChartPeriod(props){
+        console.log(props);
+        this.setState({
+            dataPerPage:props,
+        })
+        this.getData();
+        //console.log(event.target.value);
+      }
+
     
 render(){
     const {
         currentData,
         dataPerPage,
         selectedCountry,
+        population,
         temp,
         tableCountries,
         width
     } = this.state;
-
-    if(!currentData) return (
-        <Container fluid>
-            <Row className="justify-content-md-center">
-                <Col xs="12" lg="8">
-                <Card 
-                    className="shadow" 
-                    style={{marginBottom:'1rem',paddingTop:'15rem',border:'none',minHeight:"700px"}}
-                >
-                    <Loader 
-                        type="ThreeDots"
-                        color="#DD2C00"
-                        height={100}
-                        width={100}
-                        timeout={900000000}
-                    />
-                </Card>     
-                </Col>
-            </Row>
-        </Container>
+    
+    const loading = this.state.loading;
+    if(loading) return (
+        <Loading />
     );
 
     return(
@@ -168,6 +171,23 @@ render(){
                                 }
                             </Form.Control>
                     </Card>     
+                    </Col>
+                </Row>
+
+                <Row className="justify-content-md-center" style={{marginBottom:"1rem"}}>
+                    <Col xs="12" lg="8">
+                        {
+                            showChartPeriod.map((period,index)=>
+                                <Button 
+                                    key={index} variant="primary"
+                                    size="sm"
+                                    style={{margin:"0.1rem"}}
+                                    onClick={()=>this.updateChartPeriod(period.period)}
+                                >
+                                    {period.periodTitle}
+                                </Button>
+                            )               
+                        }
                     </Col>
                 </Row>
             </Container>
@@ -190,19 +210,25 @@ render(){
                                     currentData.map((list,index)=>
                                     <tr key={index}>
                                     <td>{list.date}</td>
-                                    <td><NumberFormat value={list.confirmed} displayType={'text'} thousandSeparator={true} /></td>
-                                    <td><NumberFormat value={list.recovered} displayType={'text'} thousandSeparator={true} /></td>
-                                    <td style={{fontWeight:"bold"}}><NumberFormat value={list.deaths} displayType={'text'} thousandSeparator={true} /></td>
+                                    <td>
+                                        <NumberFormat 
+                                            value={list.confirmed} 
+                                            displayType={'text'} 
+                                            thousandSeparator={true} 
+                                        />
+                                        
+                                    </td>
+                                    <td>
+                                        <NumberFormat value={list.recovered} displayType={'text'} thousandSeparator={true} />
+                                    </td>
+                                    <td style={{fontWeight:"bold"}}>
+                                        <NumberFormat value={list.deaths} displayType={'text'} thousandSeparator={true} />
+                                    </td>
                                     </tr>
                                     )
                                     }
                                 </tbody>
                                 </Table>
-                                <Pagination  
-                                    dataPerPage={dataPerPage} 
-                                    totalData={tableCountries.length} 
-                                    paginate={this.paginate}
-                                />
                         </Card>
                     
                     </Col>

@@ -1,14 +1,26 @@
 import React, { Component } from 'react';
 import {Container,Row,Col, Card} from 'react-bootstrap';
 import ReactGA from 'react-ga';
+import Loading from './loading';
 
 class AboutCoronavirus extends Component{
+    state = {
+        loading:true
+    }
     componentDidMount(){
 
         ReactGA.initialize('UA-163115935-1');
         ReactGA.pageview('/About-Coronavirus');
+        this.setState({
+            loading:false
+        })
     }
     render(){
+        const loading = this.state.loading;
+        if(loading) return(
+            <Loading />
+        )
+
         return(
             <div className="mid">
                 <Container fluid>
